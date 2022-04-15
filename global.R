@@ -6,10 +6,8 @@ library(shiny)
 library(tidyverse)
 library("shinycssloaders")
 library(DT)
-glmnet_classifier <- readr::read_rds("glmnet_classifier.rds")
-vocab = read_rds("vocab.rds")
-readr::read_csv("data-raw/2022-04-06 17_28_36_df_title_abstracts_doi.csv") %>% 
-  na.exclude()
+glmnet_classifier <- readr::read_rds("data-raw/glmnet_classifier.rds")
+vocab = read_rds("data-raw/vocab.rds")
 
 gmpd_reviewd_db <- read_csv("data-raw/gmpd_reviewd_db.csv")
 
@@ -41,11 +39,11 @@ get_pmc_id <- function(pmcid){
 
 get_pubmed_table <- function(search_query, limit_search = 100){
   {
-    another_search <- rentrez::entrez_search(db="pubmed", term=search_query, retmax = limit_search)
+    another_search <- rentrez::entrez_search(db="pubmed", term=search_query, retmax = limit_search, api_key = "f9b4f9e2d9a135618dfbc5c867c06d9a2208")
     if(length(another_search$ids) == 0){
       df = tibble(search_title = NA, search_abstract = NA, classification_score = NA,  pmid=NA, pmcid=NA, doi=NA )
     } else {
-      paper_rec <- rentrez::entrez_fetch(db="pubmed", id=another_search$ids, rettype="xml", parsed=TRUE)
+      paper_rec <- rentrez::entrez_fetch(db="pubmed", id=another_search$ids, rettype="xml", parsed=TRUE, api_key = "f9b4f9e2d9a135618dfbc5c867c06d9a2208")
       paper_rec_list <- XML::xmlToList(paper_rec)
       
       df <-  purrr::map_df(paper_rec_list, function(x){

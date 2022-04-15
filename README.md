@@ -1,33 +1,37 @@
-Untitled
+Mammal parasite paper recommender
 ================
 
-## GitHub Documents
+## Methodology
 
-This is an R Markdown format used for publishing markdown documents to
-GitHub. When you click the **Knit** button all R code chunks are run and
-a markdown file (.md) suitable for publishing to GitHub is generated.
+This is a brief summary of the methodology we use
 
-## Including Code
+-   From global parasite databse () we extract all the papers  
+-   Because we only have the name title of the paper we extract the
+    title and search in Cross Reference (<https://www.crossref.org/>)
+    the doi and the abstract if is avaliable.
+-   Also we search with the DOI and title in PubMed
+    (<https://pubmed.ncbi.nlm.nih.gov/>)
+-   We finally build a table with title, DOI, abstract and year.
+-   We label this information as “gmpd”
+-   We generate a 1000 random abstracts sample in order to has a second
+    class we call “unknown”
+-   We tokenize each abstract and create a vocabulary for each word in
+    abstract
+-   We also take in accout the bigrams and remove the common stoping
+    words in english.
+-   We keep with a vocabulary of terms with a minimum term count of 20
+    overall the papers
+-   We vectorize or vocabulary and create a document term matrix wich
+    contains
+-   With the DTM we train a penalized logistic regression model. We
+    model the two clases (gmpd and uknown) and interpret the probability
+    as a measure of how an abstracts has information close to GMPD or
+    not.
+-   We build a shiny app that search an arbitrary string in PubMed and
+    evaluates the abstracts of each paper founded acoording to our
+    linear model
 
-You can include R code in the document as follows:
+## App deploy
 
-``` r
-summary(cars)
-```
-
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
-
-## Including Plots
-
-You can also embed plots, for example:
-
-![](example_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+The app is accesible in
+<https://alroble8.shinyapps.io/mammals_virus_text_class/>
